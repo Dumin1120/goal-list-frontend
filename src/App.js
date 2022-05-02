@@ -18,13 +18,36 @@ function App() {
   const [demoCardsData, setDemoCardsData] = useState([]);
   const [demoTodosData, setDemoTodosData] = useState([]);
 
+  const addCard = (cardName) => {
+    const newCard = {
+      id: Math.max(0, ...demoCardsData.map(c => c.id)) + 1,
+      uid: "iZn6jCgv9k",
+      card_name: cardName
+    }
+    setDemoCardsData(prev => [...prev, newCard]);
+  }
+
+  const addTodo = (cardId, todoDesc) => {
+    const newTodo = {
+      id: Math.max(0, ...demoTodosData.map(t => t.id)) + 1,
+      uid: "iZn6jCgv9k",
+      to_do: todoDesc,
+      card_id: cardId
+    }
+    setDemoTodosData(prev => [...prev, newTodo]);
+  }
+
+  const editTodo = (id, todoDesc) => {
+    setDemoTodosData(prev => prev.map(t => t.id === id ? (t.to_do = todoDesc, t) : t));
+  }
+
   const removeCard = (cardId) => {
-    setDemoCardsData(prev => prev.filter(card => card.id !== cardId));
-    setDemoTodosData(prev => prev.filter(todo => todo.card_id !== cardId))
+    setDemoCardsData(prev => prev.filter(c => c.id !== cardId));
+    setDemoTodosData(prev => prev.filter(t => t.card_id !== cardId));
   }
 
   const removeTodo = (todoId) => {
-    setDemoTodosData(prev => prev.filter(todo => todo.id !== todoId));
+    setDemoTodosData(prev => prev.filter(t => t.id !== todoId));
   }
 
   useEffect(() => {
@@ -34,7 +57,6 @@ function App() {
 
   return (
     <div className="App">
-      {console.log(demoCardsData, demoTodosData)}
       <UserProvider>
         <BrowserRouter>
           <Navbar />
@@ -45,10 +67,13 @@ function App() {
             <Route path="/:cardId" element={<GoalCardDetail />} />
             <Route path="/demo" element={<TryDemo
               demoCardsData={demoCardsData}
+              addCard={addCard}
               removeCard={removeCard}
             />} />
             <Route path="/demo/:cardId" element={<DemoGoalCardDetail
               demoTodosData={demoTodosData}
+              addTodo={addTodo}
+              editTodo={editTodo}
               removeCard={removeCard}
               removeTodo={removeTodo}
             />} />

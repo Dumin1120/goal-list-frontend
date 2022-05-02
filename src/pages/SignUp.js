@@ -21,11 +21,7 @@ export default function SignUp() {
         const error = await userSignUp(name, email, password);
         if (error) return setErrorMsg(error);
 
-        navigate("/");
-    }
-
-    const handleGoback = () => {
-        navigate("/");
+        navigate("/", { replace: true });
     }
 
     return (
@@ -70,7 +66,7 @@ export default function SignUp() {
                 /><br />
                 <button type="submit" hidden>needed for {"<enter>"}</button>
             </form>
-            <button onClick={handleGoback}>Go back</button>
+            <button onClick={() => navigate("/")}>Cancel</button>
             <button onClick={handleSubmit}>Sign up</button>
         </div>
     )

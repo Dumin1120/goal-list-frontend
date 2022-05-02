@@ -21,14 +21,14 @@ export default function LogIn() {
             return setInfo({ ...info, errorMsg: error });
         }
 
-        navigate("/");
+        navigate("/", { replace: true });
     }
 
     const handleProviderLogin = async (providerName) => {
         const error = await userSignInWithProvider(providerName);
         if (error) return setInfo({ ...info, errorMsg: error });
 
-        navigate("/");
+        navigate("/", { replace: true });
     }
 
     return (
