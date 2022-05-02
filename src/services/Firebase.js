@@ -29,45 +29,63 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-const googleProvider = new GoogleAuthProvider();
-const githubProvider = new GithubAuthProvider();
-
 export const auth = getAuth(app);
 
 export const userSignUp = async (name, email, password) => {
     let error = null;
     await createUserWithEmailAndPassword(auth, email, password)
         .then((credential) => updateProfile(credential.user, { displayName: name }))
-        .catch((err) => error = err.message)
+        .catch((err) => error = err.code)
     return error;
 }
 
 export const userSignIn = async (email, password) => {
     let error = null;
     await signInWithEmailAndPassword(auth, email, password)
-        .catch((err) => error = err.message)
+        .catch((err) => error = err.code)
     return error;
 }
+
+const googleProvider = new GoogleAuthProvider();
+const githubProvider = new GithubAuthProvider();
 
 export const userSignInWithProvider = async (providerName) => {
     const provider = providerName === "google" ? googleProvider : githubProvider;
     let error = null;
     await signInWithPopup(auth, provider)
-        .catch((err) => error = err.message)
+        .catch((err) => error = err.code)
+    return error;
+}
+
+export const userReauthenticate = async (user, email, password) => {
+    if (!user) return "User does not exist!";
+
+    let error = null;
+    const providerId = user.providerData[0].providerId;
+    if (providerId.match("password")) {
+        const credential = EmailAuthProvider.credential(email, password);
+        await reauthenticateWithCredential(user, credential)
+            .catch((err) => error = err.code)
+        return error;
+    }
+
+    const provider = providerId.match("google") ? googleProvider : githubProvider;
+    await reauthenticateWithPopup(user, provider)
+        .catch((err) => error = err.code)
     return error;
 }
 
 export const userSignOut = async () => {
     let error = null;
     await signOut(auth)
-        .catch((err) => error = err.message)
+        .catch((err) => error = err.code)
     return error;
 }
 
 export const userResetPassword = async (email) => {
     let error = null;
     await sendPasswordResetEmail(auth, email)
-        .catch((err) => error = err.message)
+        .catch((err) => error = err.code)
     return error;
 }
 
@@ -77,7 +95,7 @@ export const userUpdateName = async (user, name) => {
     let error = null;
     await updateProfile(user, { displayName: name })
         .then(() => user.reload())
-        .catch((err) => error = err.message)
+        .catch((err) => error = err.code)
     return error;
 }
 
@@ -86,7 +104,7 @@ export const userUpdateEmail = async (user, email) => {
 
     let error = null;
     await updateEmail(user, email)
-        .catch((err) => error = err.message)
+        .catch((err) => error = err.code)
     return error;
 }
 
@@ -95,7 +113,7 @@ export const userUpdatePassword = async (user, newPassword) => {
 
     let error = null;
     await updatePassword(user, newPassword)
-        .catch((err) => error = err.message)
+        .catch((err) => error = err.code)
     return error;
 }
 
@@ -104,24 +122,6 @@ export const userDeleteAccount = async (user) => {
 
     let error = null;
     await deleteUser(user)
-        .catch((err) => error = err.message)
-    return error;
-}
-
-export const userReauthenticate = async (user, email, password) => {
-    if (!user) return "User does not exist!";
-
-    let error = null;
-    const providerId = user.providerData[0].providerId;
-    if (providerId.includes("password")) {
-        const credential = EmailAuthProvider.credential(email, password);
-        await reauthenticateWithCredential(user, credential)
-            .catch((err) => error = err.message)
-        return error;
-    }
-
-    const provider = providerId.includes("google") ? googleProvider : githubProvider;
-    await reauthenticateWithPopup(user, provider)
-        .catch((err) => error = err.message)
+        .catch((err) => error = err.code)
     return error;
 }
