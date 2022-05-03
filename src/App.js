@@ -37,6 +37,10 @@ function App() {
     setDemoTodosData(prev => [...prev, newTodo]);
   }
 
+  const editCard = (id, cardName) => {
+    setDemoCardsData(prev => prev.map(c => c.id === id ? (c.card_name = cardName, c) : c));
+  }
+
   const editTodo = (id, todoDesc) => {
     setDemoTodosData(prev => prev.map(t => t.id === id ? (t.to_do = todoDesc, t) : t));
   }
@@ -57,6 +61,7 @@ function App() {
 
   return (
     <div className="App">
+      {console.log(demoCardsData, demoTodosData)}
       <UserProvider>
         <BrowserRouter>
           <Navbar />
@@ -68,11 +73,14 @@ function App() {
             <Route path="/demo" element={<TryDemo
               demoCardsData={demoCardsData}
               addCard={addCard}
+              editCard={editCard}
               removeCard={removeCard}
             />} />
             <Route path="/demo/:cardId" element={<DemoGoalCardDetail
+              demoCardsData={demoCardsData}
               demoTodosData={demoTodosData}
               addTodo={addTodo}
+              editCard={editCard}
               editTodo={editTodo}
               removeCard={removeCard}
               removeTodo={removeTodo}

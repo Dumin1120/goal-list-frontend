@@ -42,9 +42,9 @@ export default function DemoTodoDetail({ editTodo, removeTodo, id, to_do }) {
                 <div>
                     {description} &nbsp;
                     <button onClick={() => setShowEditBox(prev => !prev)}>EDIT</button>
+                    <button onClick={() => removeTodo(id)}>DEL</button>
                 </div>
             }
-            <button onClick={() => removeTodo(id)}>DEL</button>
         </div>
     )
 }

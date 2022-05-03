@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import DemoGoalCard from "../components/DemoGoalCard";
 
-export default function TryDemo({ demoCardsData, addCard, removeCard }) {
+export default function TryDemo({ demoCardsData, addCard, editCard, removeCard }) {
     const [cardName, setCardName] = useState("");
     const [showInputBox, setShowInputBox] = useState(false);
     const buttonCreate = useRef(null);
@@ -50,6 +50,7 @@ export default function TryDemo({ demoCardsData, addCard, removeCard }) {
                 {demoCardsData.map(card => <DemoGoalCard
                     key={card.id}
                     addCard={addCard}
+                    editCard={editCard}
                     removeCard={removeCard}
                     {...card}
                 />)}

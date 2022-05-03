@@ -2,13 +2,32 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import DemoTodoDetail from "./DemoTodoDetail";
 
-export default function DemoGoalCardDetail({ demoTodosData, addTodo, editTodo, removeCard, removeTodo }) {
+export default function DemoGoalCardDetail({ demoCardsData, demoTodosData, addTodo, editCard, editTodo, removeCard, removeTodo }) {
+    const [cardData, setCardData] = useState({});
+    const [cardName, setCardName] = useState("");
     const [todos, setTodos] = useState([]);
     const [todoDesc, setTodoDesc] = useState("");
     const [showInputBox, setShowInputBox] = useState(false);
+    const [showEditBox, setShowEditBox] = useState(false);
     const { cardId } = useParams();
     const navigate = useNavigate();
+    const buttonEdit = useRef(null);
     const buttonCreate = useRef(null);
+
+    const handleCardChange = (e) => {
+        setCardName(prev => e.target.value);
+    }
+
+    const handleCardCancel = () => {
+        setShowEditBox(prev => !prev);
+        setCardName(prev => cardData?.card_name || "");
+    }
+
+    const handleCardSubmit = (e) => {
+        e.preventDefault();
+        editCard(+cardId, cardName);
+        setShowEditBox(prev => !prev);
+    }
 
     const handleRemoveCard = () => {
         removeCard(+cardId);
@@ -31,8 +50,15 @@ export default function DemoGoalCardDetail({ demoTodosData, addTodo, editTodo, r
     }
 
     useEffect(() => {
-        setTodos(demoTodosData.filter(todo => todo.card_id === +cardId));
-    }, [demoTodosData, cardId])
+        setTodos(prev => demoTodosData.filter(t => t.card_id === +cardId));
+        const found = demoCardsData.find(c => c.id === +cardId);
+        setCardData(prev => found || {});
+        setCardName(prev => found?.card_name || "");
+    }, [demoTodosData, cardId, demoCardsData])
+
+    useEffect(() => {
+        buttonEdit?.current?.focus();
+    }, [showEditBox])
 
     useEffect(() => {
         buttonCreate?.current?.focus();
@@ -40,13 +66,29 @@ export default function DemoGoalCardDetail({ demoTodosData, addTodo, editTodo, r
 
     return (
         <div>
-            <h1>GOALCARDDETAIL</h1>
-            <button onClick={handleRemoveCard}>Remove whole card</button><br />
+            {showEditBox
+                ?
+                <div>
+                    <form onSubmit={handleCardSubmit}>
+                        <label>Card name:
+                            <input ref={buttonEdit} value={cardName} onChange={handleCardChange} /><br />
+                        </label>
+                    </form>
+                    <button onClick={handleCardCancel}>Cancel</button>
+                    <button onClick={handleCardSubmit}>Update</button>
+                </div>
+                :
+                <div>
+                    <h1>{cardData?.card_name}</h1>
+                    <button onClick={() => setShowEditBox(prev => !prev)}>Update card name</button>
+                    <button onClick={handleRemoveCard}>Remove whole card</button><br />
+                </div>
+            }
             {showInputBox
                 ?
                 <div>
                     <form onSubmit={handleCreate}>
-                        <label>to do description:
+                        <label>to-do description:
                             <input ref={buttonCreate} value={todoDesc} onChange={handleChange} /><br />
                         </label>
                     </form>
