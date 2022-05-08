@@ -1,0 +1,41 @@
+.signup {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    form {
+        display: flex;
+        flex-flow: column wrap;
+        row-gap: 3px;
+        label {
+            font-size: 18px;
+            font-weight: 600;
+        }
+    }
+    &__input-box {
+        width: 300px;
+        font-size: 18px;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        &:focus {
+            background-color: #fff7ea;
+        }
+    }
+    button {
+        border-radius: 5px;
+        font-size: 18px;
+        margin: 4px;
+        &:hover {
+            background-color: #ffd089;
+        }
+    }
+    &__btn-cancel {
+        width: 80px;
+        background-color: transparent;
+        border: #707070 2px solid;
+    }
+    &__btn-submit {
+        width: 220px;
+        background-color: #fee7c5;
+        border: #444 2px solid;
+    }
+}

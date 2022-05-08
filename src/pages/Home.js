@@ -1,6 +1,15 @@
-import { Link } from "react-router-dom";
+import { useContext, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { UserContext } from "../providers/UserProvider";
 
 export default function Home() {
+    const user = useContext(UserContext);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (user) navigate("/board");
+    }, [user, navigate])
+
     return (
         <div>
             <h1>HOME HERE</h1>

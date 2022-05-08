@@ -1,0 +1,47 @@
+.login {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    form {
+        display: flex;
+        flex-flow: column wrap;
+        row-gap: 3px;
+        label {
+            font-size: 18px;
+            font-weight: 600;
+        }
+    }
+    &__input-box {
+        width: 300px;
+        font-size: 18px;
+        border-radius: 5px;
+        margin: 0 0 8px 0;
+        &:focus {
+            background-color: #fff7ea;
+        }
+    }
+    button {
+        width: 306px;
+        align-self: center;
+        border: #444 2px solid;
+        border-radius: 5px;
+        font-size: 18px;
+        margin: 6px 0 6px 0;
+    }
+    &__btn-submit, &__btn-google, &__btn-github {
+        background-color: #fee7c5;
+        &:hover {
+            background-color: #ffd089;
+        }
+    }
+    &__divider {
+        display: flex;
+        flex-flow: row nowrap;
+        margin: 25px 0 25px 0;
+        hr {
+            width: 122px;
+            border-radius: 5px;
+            background-color: #969696;
+        }
+    }
+}

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { userSignIn, userSignInWithProvider } from "../services/firebase";
+import "./UserLogIn.scss";
 
-export default function LogIn() {
+export default function UserLogIn() {
     const [info, setInfo] = useState({ email: "", password: "", errorMsg: "" });
     const [sendingForm, setSendingForm] = useState(false);
     const navigate = useNavigate();
@@ -32,13 +33,13 @@ export default function LogIn() {
     }
 
     return (
-        <div>
-            <h1>LOGIN IN HERE</h1>
-            <h2>Welcome back!</h2>
-            <h3>Log in to your account</h3>
+        <div className="login">
+            <h1>Welcome back!</h1>
             <form onSubmit={handleSubmit}>
+                <h2>Log in to Goal!</h2>
                 <label htmlFor="email">Email</label>
                 <input
+                    className="login__input-box"
                     type="email"
                     id="email"
                     value={info.email}
@@ -47,20 +48,26 @@ export default function LogIn() {
                 />
                 <label htmlFor="password">Password</label>
                 <input
+                    className="login__input-box"
                     type="password"
                     id="password"
                     value={info.password}
                     onChange={handleChange}
                     required
                 />
+                {info.errorMsg}
                 {sendingForm
-                    ? <input type="submit" value="Please wait..." disabled />
-                    : <input type="submit" value="Continue" />
+                    ? <button className="login__btn-submit" type="submit" disabled>Logging in...</button>
+                    : <button className="login__btn-submit" type="submit">Continue</button>
                 }
             </form>
-            <button onClick={() => handleProviderLogin("google")}>Continue with Google</button>
-            <button onClick={() => handleProviderLogin("github")}>Continue with Github</button>
-            {info.errorMsg}
+            <div className="login__divider">
+                <hr />
+                &emsp;OR&emsp;
+                <hr />
+            </div>
+            <button className="login__btn-google" onClick={() => handleProviderLogin("google")}>Continue with Google</button>
+            <button className="login__btn-github" onClick={() => handleProviderLogin("github")}>Continue with Github</button>
         </div>
     )
 }

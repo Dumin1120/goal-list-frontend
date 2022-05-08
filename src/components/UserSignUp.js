@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { userSignUp } from "../services/firebase";
+import "./UserSignUp.scss";
 
-export default function SignUp() {
+export default function UserSignUp() {
     const [info, setInfo] = useState({ name: "", email: "", password: "", confirmPassword: "" });
     const [errorMsg, setErrorMsg] = useState("");
     const navigate = useNavigate();
@@ -25,49 +26,56 @@ export default function SignUp() {
     }
 
     return (
-        <div>
-            <h1>SIGNUP HERE</h1>
-            <h2>Create your account</h2>
-            {errorMsg}
+        <div className="signup">
             <form onSubmit={handleSubmit}>
-                <label htmlFor="email">Email</label>
-                <input
-                    type="email"
-                    id="email"
-                    value={info.email}
-                    onChange={handleChange}
-                    required
-                /><br />
-                <label htmlFor="password">Password (Min 6 chars)</label>
-                <input
-                    type="password"
-                    id="password"
-                    value={info.password}
-                    onChange={handleChange}
-                    required
-                /><br />
-                <label htmlFor="confirmPassword">
-                    Confirm Password {info.confirmPassword && (info.password !== info.confirmPassword) && <span>does not match</span>}
-                </label>
-                <input
-                    type="password"
-                    id="confirmPassword"
-                    value={info.confirmPassword}
-                    onChange={handleChange}
-                    required
-                /><br />
+                <h2>Create your account</h2>
                 <label htmlFor="name">Name</label>
                 <input
+                    className="signup__input-box"
                     type="text"
                     id="name"
                     value={info.name}
                     onChange={handleChange}
                     required
-                /><br />
+                />
+                <label htmlFor="email">Email</label>
+                <input
+                    className="signup__input-box"
+                    type="email"
+                    id="email"
+                    value={info.email}
+                    onChange={handleChange}
+                    required
+                />
+                <label htmlFor="password">Password (Min 6 chars)</label>
+                <input
+                    className="signup__input-box"
+                    type="password"
+                    id="password"
+                    value={info.password}
+                    onChange={handleChange}
+                    required
+                />
+                <label htmlFor="confirmPassword">
+                    Confirm password {info.confirmPassword && (info.password !== info.confirmPassword) && <span>does not match</span>}
+                </label>
+                <input
+                    className="signup__input-box"
+                    type="password"
+                    id="confirmPassword"
+                    value={info.confirmPassword}
+                    onChange={handleChange}
+                    required
+                />
                 <button type="submit" hidden>needed for {"<enter>"}</button>
             </form>
-            <button onClick={() => navigate("/")}>Cancel</button>
-            <button onClick={handleSubmit}>Sign up</button>
+            <div>
+                {errorMsg || <span>&nbsp;</span>}
+            </div>
+            <div>
+                <button className="signup__btn-cancel" onClick={() => navigate("/")}>Cancel</button>
+                <button className="signup__btn-submit" onClick={handleSubmit}>Sign up</button>
+            </div>
         </div>
     )
 }

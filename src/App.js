@@ -1,20 +1,54 @@
-import { useState, useEffect } from "react";
+// import { useState, useEffect, useContext } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { UserProvider } from "./providers/UserProvider";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
-import LogIn from "./pages/LogIn";
-import SignUp from "./pages/SignUp";
-import TryDemo from "./pages/TryDemo";
+import HomeBoard from "./components/HomeBoard";
+import UserLogIn from "./components/UserLogIn";
+import UserSignUp from "./components/UserSignUp";
 import GoalCardDetail from "./components/GoalCardDetail";
-import DemoGoalCardDetail from "./components/DemoGoalCardDetail";
-// import TestUserAcc from "./components/TestUserAcc";
 
 import "./App.css";
 
-import { demoCards, demoTodos } from "./data/demoData";
 
-function App() {
+export default function App() {
+
+  return (
+    <div className="App">
+      <UserProvider>
+        <BrowserRouter>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/board" element={<HomeBoard />} />
+            <Route path="/login" element={<UserLogIn />} />
+            <Route path="/signup" element={<UserSignUp />} />
+            <Route path="/card/:cardId" element={<GoalCardDetail />} />
+            {/* <Route path="/:cardId" element={<GoalCardDetail />} /> */}
+            {/* <Route path="/demo" element={<TryDemo
+              demoCardsData={demoCardsData}
+              addCard={addCard}
+              editCard={editCard}
+              removeCard={removeCard}
+            />} />
+            <Route path="/demo/:cardId" element={<DemoGoalCardDetail
+              demoCardsData={demoCardsData}
+              demoTodosData={demoTodosData}
+              addTodo={addTodo}
+              editCard={editCard}
+              editTodo={editTodo}
+              removeCard={removeCard}
+              removeTodo={removeTodo}
+            />} /> */}
+          </Routes>
+        </BrowserRouter>
+      </UserProvider>
+    </div>
+  );
+}
+
+/*
+
   const [demoCardsData, setDemoCardsData] = useState([]);
   const [demoTodosData, setDemoTodosData] = useState([]);
 
@@ -58,39 +92,4 @@ function App() {
     setDemoCardsData(demoCards);
     setDemoTodosData(demoTodos);
   }, [])
-
-  return (
-    <div className="App">
-      {console.log(demoCardsData, demoTodosData)}
-      <UserProvider>
-        <BrowserRouter>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<LogIn />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/:cardId" element={<GoalCardDetail />} />
-            <Route path="/demo" element={<TryDemo
-              demoCardsData={demoCardsData}
-              addCard={addCard}
-              editCard={editCard}
-              removeCard={removeCard}
-            />} />
-            <Route path="/demo/:cardId" element={<DemoGoalCardDetail
-              demoCardsData={demoCardsData}
-              demoTodosData={demoTodosData}
-              addTodo={addTodo}
-              editCard={editCard}
-              editTodo={editTodo}
-              removeCard={removeCard}
-              removeTodo={removeTodo}
-            />} />
-          </Routes>
-        </BrowserRouter>
-        {/* <TestUserAcc /> */}
-      </UserProvider>
-    </div>
-  );
-}
-
-export default App;
+*/
