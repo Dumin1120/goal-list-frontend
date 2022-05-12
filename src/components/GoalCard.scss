@@ -1,3 +1,52 @@
-h2 {
-    display: inline-block;
+.goalcard {
+    background-color: bisque;
+    display: flex;
+    flex-flow: column nowrap;
+    border-radius: 10px;
+    &__name-container {
+        width: 300px;
+        display: flex;
+        padding: 10px;
+    }
+    &__name {
+        flex-grow: 1;
+        cursor: pointer;
+        width: 280px;
+        font-size: 17px;
+        font-weight: 700;
+        white-space: nowrap; 
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    &__del {
+        background-color: transparent;
+        border-radius: 3px;
+        border: 0px;
+        color: grey;
+        width: 20px;
+        padding: 5px 0 3px 0;
+        &:hover {
+            color: black;
+            background-color: rgb(255, 130, 130);
+        }
+    }
+    &__name-input {
+        width: 98%;
+        font-size: 16px;
+        font-weight: 550;
+    }
+    &__footer {
+        padding: 10px;
+        white-space: nowrap; 
+        overflow: hidden;
+    }
+    ul {
+        border-radius: 5px;
+        margin: 0px;
+        padding: 5px 10px;
+        list-style: none;
+        li {
+            font-size: 17px;
+        }
+    }
 }

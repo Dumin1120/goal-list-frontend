@@ -7,9 +7,8 @@ import HomeBoard from "./components/HomeBoard";
 import UserLogIn from "./components/UserLogIn";
 import UserSignUp from "./components/UserSignUp";
 import GoalCardDetail from "./components/GoalCardDetail";
-
+import ShareCardDetail from "./components/ShareCardDetail";
 import "./App.css";
-
 
 export default function App() {
 
@@ -24,6 +23,7 @@ export default function App() {
             <Route path="/login" element={<UserLogIn />} />
             <Route path="/signup" element={<UserSignUp />} />
             <Route path="/card/:cardId" element={<GoalCardDetail />} />
+            <Route path="/share/:share_key" element={<ShareCardDetail />} />
             {/* <Route path="/:cardId" element={<GoalCardDetail />} /> */}
             {/* <Route path="/demo" element={<TryDemo
               demoCardsData={demoCardsData}

@@ -25,10 +25,12 @@ export default function HomeBoard() {
 
     const createCard = async (e) => {
         e.preventDefault();
+        if (!cardName.trim()) return;
         try {
             const newCard = { uid: user.uid, card_name: cardName };
             const { data } = await axios.post(`${apiURL}/goalcards/modify`, newCard)
             if (!data.success) throw data.message;
+            console.log(data)
             setCardName(prev => "");
             getAllCards();
         } catch (err) {
@@ -43,22 +45,26 @@ export default function HomeBoard() {
 
     return (
         <div className='homeboard'>
-            <form onSubmit={createCard}>
-                <input
-                    type="text"
-                    id="card_name"
-                    value={cardName}
-                    onChange={(e) => setCardName(e.target.value)}
-                />
-            </form>
             {cards.map(card =>
                 <GoalCard
                     key={card.id}
                     editCardId={editCardId}
                     setEditCardId={setEditCardId}
                     getAllCards={getAllCards}
+                    uid={user?.uid}
                     {...card}
                 />)}
+            <form onSubmit={createCard}>
+                <input
+                    className="homeboard__card-input"
+                    type="text"
+                    id="card_name"
+                    placeholder="Add a new goal/list here"
+                    value={cardName}
+                    onKeyDown={(e) => e.keyCode === 27 && setCardName(prev => "")}
+                    onChange={(e) => setCardName(e.target.value)}
+                />
+            </form>
         </div>
     )
 }

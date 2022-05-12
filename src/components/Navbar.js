@@ -21,9 +21,9 @@ export default function Navbar() {
                     </div>
                     :
                     <ul>
-                        <li>
+                        {/* <li>
                             <Link to="demo">Try demo</Link>
-                        </li>
+                        </li> */}
                         <li>
                             <Link to="login">Log in</Link>
                         </li>

@@ -1,29 +1,25 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { UserContext } from "../providers/UserProvider";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import { apiURL } from "../utils/apiURL";
 import axios from "axios";
-import Task from "./Task";
+import ShareTask from "./ShareTask";
 
-export default function GoalCardDetail() {
-    const user = useContext(UserContext);
-    const { cardId } = useParams();
-    const navigate = useNavigate();
+export default function ShareCardDetail() {
+    const { share_key } = useParams();
     const [cardTasks, setCardTasks] = useState([]);
-    const [cardInfo, setCardInfo] = useState({});
-    const [cardName, setCardName] = useState({ prev: "", curr: "" });
     const [newTask, setNewTask] = useState("");
     const [editTaskId, setEditTaskId] = useState(-1);
+    const [cardName, setCardName] = useState({ prev: "", curr: "" });
+    const [cardInfo, setCardInfo] = useState({});
     const btnEdit = useRef(null);
 
-    const getCardTasks = useCallback(async () => {
+    const getShareCardTasks = useCallback(async () => {
         try {
-            let card = { card_id: +cardId, uid: user?.uid };
-            const { data } = await axios.post(`${apiURL}/tasks`, card);
+            let card = { share_key };
+            const { data } = await axios.get(`${apiURL}/share/tasks/${share_key}`, card);
             if (!data.success) throw data.message;
             if (data.payload.length === 0) {
-                card = { ...card, id: +cardId };
-                const { data: cardData } = await axios.post(`${apiURL}/goalcards`, card);
+                const { data: cardData } = await axios.get(`${apiURL}/share/card/${share_key}`, card);
                 if (!cardData.success) throw cardData.message;
                 const { card_name } = cardData.payload;
                 setCardName({ prev: card_name, curr: card_name });
@@ -36,18 +32,18 @@ export default function GoalCardDetail() {
         } catch (err) {
             console.warn(err);
         }
-    }, [cardId, user])
+    }, [share_key])
 
-    const createTask = async (e) => {
+    const createShareTask = async (e) => {
         e.preventDefault();
         if (!newTask.trim()) return;
         try {
             const position = 1 + cardTasks.reduce((a, b) => a < b.position ? b.position : a, 0);
-            const task = { ...cardInfo, card_name: cardName.prev, uid: user.uid, task: newTask, position };
-            const { data } = await axios.post(`${apiURL}/tasks/modify`, task);
+            const task = { ...cardInfo, card_name: cardName.prev, task: newTask, position };
+            const { data } = await axios.post(`${apiURL}/share/tasks`, task);
             if (!data.success) throw data.message;
             setNewTask(prev => "");
-            getCardTasks();
+            getShareCardTasks();
         } catch (err) {
             console.warn(err);
         }
@@ -56,8 +52,9 @@ export default function GoalCardDetail() {
     const updateCardName = async (e) => {
         e.preventDefault();
         try {
-            const card = { id: +cardId, uid: user.uid, card_name: cardName.curr };
-            const { data } = await axios.put(`${apiURL}/goalcards/modify`, card);
+            const card = { ...cardInfo, id: cardInfo.card_id, card_name: cardName.curr };
+            console.log(card)
+            const { data } = await axios.put(`${apiURL}/share/card`, card);
             if (!data.success) throw data.message;
             const { curr } = cardName;
             setCardName({ prev: curr, curr });
@@ -74,9 +71,8 @@ export default function GoalCardDetail() {
     }
 
     useEffect(() => {
-        if (!user) navigate("/");
-        getCardTasks();
-    }, [user, navigate, getCardTasks])
+        getShareCardTasks();
+    }, [getShareCardTasks])
 
     useEffect(() => {
         const { prev, curr } = cardName;
@@ -114,30 +110,35 @@ export default function GoalCardDetail() {
                     </>
                 }
             </div>
-            <form onSubmit={createTask}>
+            <form onSubmit={createShareTask}>
                 <input
                     type="text"
-                    id="task_name"
+                    id="card_name"
                     value={newTask}
                     onChange={(e) => setNewTask(e.target.value)}
                 />
             </form>
             {cardTasks.map(task =>
-                <Task
+                <ShareTask
                     key={task.id}
-                    uid={user.uid}
                     editTaskId={editTaskId}
                     setEditTaskId={setEditTaskId}
-                    getCardTasks={getCardTasks}
+                    getShareCardTasks={getShareCardTasks}
                     {...task}
                 />
             )}
-            {!cardTasks.length &&
+            {!cardName.curr
+                ?
                 <div>
-                    There is no task yet, please add one!
+                    This card is private!
                 </div>
+                :
+                (!cardTasks.length &&
+                    <div>
+                        There is no task yet, please add one!
+                    </div>
+                )
             }
-            <button onClick={() => navigate("/board")}>Go back</button>
         </div>
     )
 }

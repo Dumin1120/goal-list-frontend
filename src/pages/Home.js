@@ -16,7 +16,7 @@ export default function Home() {
             <div>Track your goal and to-do!</div>
             <div>
                 <Link to="/signup">Let's get started {">"}</Link> &emsp;
-                <Link to="/demo">Try demo</Link>
+                {/* <Link to="/demo">Try demo</Link> */}
             </div>
         </div>
     )

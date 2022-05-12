@@ -1,0 +1,12 @@
+.homeboard {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 20px;
+    &__card-input {
+        width: 310px;
+        font-size: 16px;
+        font-weight: 550;
+        border-radius: 7px;
+        border: 2px solid #969696;
+    }
+}

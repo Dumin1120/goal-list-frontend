@@ -1,18 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import { apiURL } from "../utils/apiURL";
 import axios from "axios";
-import "./Task.scss";
 
-export default function Task({
+export default function ShareTask({
     id,
     card_id,
-    uid,
+    card_name,
     task,
     position,
     completed,
+    share,
+    share_edit,
+    share_key,
     editTaskId,
     setEditTaskId,
-    getCardTasks }) {
+    getShareCardTasks
+}) {
     const [taskText, setTaskText] = useState({ prev: task, curr: task });
     const [taskCompleted, setTaskCompleted] = useState(completed);
     const btnEdit = useRef(null);
@@ -20,14 +23,14 @@ export default function Task({
     const updateTask = async (e) => {
         e.preventDefault();
         try {
-            const task = { id, uid, task: taskText.curr };
-            const { data } = await axios.put(`${apiURL}/tasks/modify`, task);
+            const task = { id, share_key, task: taskText.curr };
+            const { data } = await axios.put(`${apiURL}/share/tasks/`, task);
             console.log("TASK L25", data)
             if (!data.success) throw data.message;
             const { curr } = taskText;
             setTaskText({ prev: curr, curr });
             setEditTaskId(-1);
-            getCardTasks();
+            getShareCardTasks();
         } catch (err) {
             console.warn(err);
         }
@@ -41,10 +44,10 @@ export default function Task({
 
     const deleteTask = async () => {
         try {
-            const task = { data: { id, uid } };
-            const { data } = await axios.delete(`${apiURL}/tasks/modify`, task);
+            const task = { data: { id, share_key } };
+            const { data } = await axios.delete(`${apiURL}/share/tasks/`, task);
             if (!data.success) throw data.message;
-            getCardTasks();
+            getShareCardTasks();
         } catch (err) {
             console.warn(err);
         }
@@ -52,8 +55,8 @@ export default function Task({
 
     const toggleTaskCompleted = async () => {
         try {
-            const task = { id, uid, completed: !taskCompleted };
-            const { data } = await axios.put(`${apiURL}/tasks/modify`, task);
+            const task = { id, share_key, completed: !taskCompleted };
+            const { data } = await axios.put(`${apiURL}/share/tasks/`, task);
             if (!data.success) throw data.message;
             setTaskCompleted(prev => !prev);
         } catch (err) {
